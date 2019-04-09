@@ -7,7 +7,7 @@ as a kitchen timer or for anything you need.
 
 ## Usage
 
-Grab the binary from the releases section and run it from your terminal:
+Grab the binary from the [releases section](https://github.com/piradoiv/timer.pas/releases) and run it from your terminal:
 
 ```
 $ timer <minutes>
