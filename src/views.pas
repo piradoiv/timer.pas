@@ -7,24 +7,11 @@ interface
 uses
   Classes, SysUtils, Crt, Numbers, Math, StrUtils, VidUtils;
 
-procedure ClearScreen;
-procedure DrawTimer(ElapsedSeconds, AvailableSeconds: integer);
-procedure DrawFinish;
+procedure DrawTimer(AvailableSeconds: integer);
 
 implementation
 
-procedure ClearScreen;
-var
-  Y: integer;
-begin
-  for Y := ScreenHeight downto 1 do
-  begin
-    GotoXY(1, Y);
-    ClrEol;
-  end;
-end;
-
-procedure DrawTimer(ElapsedSeconds, AvailableSeconds: integer);
+procedure DrawTimer(AvailableSeconds: integer);
 var
   Color, Background: Word;
   Message: string;
@@ -99,15 +86,6 @@ begin
   TextColor(Black);
   TextBackground(Black);
   GotoXY(1, ScreenHeight);
-end;
-
-procedure DrawFinish;
-begin
-  TextBackground(Red);
-  TextColor(White);
-  ClearScreen;
-  Writeln('The end!');
-  Writeln('Press [ESC] to exit and [ENTER] to repeat');
 end;
 
 end.

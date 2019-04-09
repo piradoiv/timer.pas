@@ -6,7 +6,8 @@ uses
   CustApp,
   DateUtils,
   Views,
-  Crt;
+  Crt,
+  VidUtils;
 
 const
   DEFAULT_AMOUNT = 25 * 60;
@@ -39,7 +40,7 @@ begin
       ElapsedSeconds := SecondsBetween(Now, StartTime);
       AvailableSeconds := TimerSeconds - ElapsedSeconds;
       if Previous <> AvailableSeconds then
-        DrawTimer(ElapsedSeconds, AvailableSeconds);
+        DrawTimer(AvailableSeconds);
       Previous := AvailableSeconds;
       Sleep(500);
     until KeyPressed;
