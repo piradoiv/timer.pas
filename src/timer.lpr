@@ -9,6 +9,7 @@ uses
   Crt;
 
 const
+  DEFAULT_AMOUNT = 25 * 60;
   VK_ESC = #27;
   VK_ENTER = #13;
 
@@ -16,8 +17,6 @@ procedure Cleanup;
 begin
   while KeyPressed do
     ReadKey;
-  TextBackground(Black);
-  TextColor(White);
   NormVideo;
   ClearScreen;
 end;
@@ -31,7 +30,7 @@ begin
   Finished := False;
   Previous := 0;
 
-  TimerSeconds := 25 * 60;
+  TimerSeconds := DEFAULT_AMOUNT;
   if ParamCount = 1 then
     TimerSeconds := Round(StrToFloat(ParamStr(1)) * 60);
 
