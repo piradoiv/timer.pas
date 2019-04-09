@@ -27,7 +27,7 @@ var
 begin
   for I := Low(Lines) to High(Lines) do
   begin
-    Line := String(Lines[I].VString);
+    Line := string(Lines[I].VString);
     X := Round((ScreenWidth / 2) - (Length(Line) / 2));
     Y := Round(ScreenHeight / 2) + I - 1;
     TextOut(X, Y, Line);
@@ -46,10 +46,10 @@ begin
   end;
 end;
 
-Procedure RefreshWindowSize;
+procedure RefreshWindowSize;
 { This procedure is based on GetConsoleBuf of the Crt Unit }
 var
-  WinInfo : TWinSize;
+  WinInfo: TWinSize;
 begin
   fpIOCtl(TextRec(Output).Handle, TIOCGWINSZ, @Wininfo);
   if (Wininfo.ws_col = ScreenWidth) and (Wininfo.ws_row = ScreenHeight) then
