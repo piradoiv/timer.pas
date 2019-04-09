@@ -102,8 +102,7 @@ begin
 
       X := ((I - 1) * 7) + ((J - 1) mod 6);
       Y := Floor((J - 1) / 6);
-      GotoXY(OffsetX + X, OffsetY + Y);
-      Write(' ');
+      TextOut(OffsetX + X, OffsetY + Y, ' ');
     end;
   end;
 end;
