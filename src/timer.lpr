@@ -46,6 +46,7 @@ begin
 
     while KeyPressed do
       case ReadKey of
+        'q': Finished := True;
         VK_ESC: Finished := True;
         VK_ENTER: StartTime := Now;
       end;
