@@ -1,3 +1,6 @@
 /timer
 /src/lib
+/dist
+**/*.ppu
+**/*.o
 **/*.lps
