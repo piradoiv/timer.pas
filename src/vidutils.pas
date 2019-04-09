@@ -14,12 +14,18 @@ procedure RefreshWindowSize;
 
 implementation
 
+//-----------------------------------------------------------------------------
+// Helper procedure to print a text directly in an specific position
+//-----------------------------------------------------------------------------
 procedure TextOut(X, Y: integer; Text: string);
 begin
   GotoXY(X, Y);
   Write(Text);
 end;
 
+//-----------------------------------------------------------------------------
+// Prints a multi-line message centered on screen
+//-----------------------------------------------------------------------------
 procedure TextOutCentered(Lines: array of const);
 var
   I, X, Y: integer;
@@ -35,6 +41,11 @@ begin
   GotoXY(ScreenWidth, ScreenHeight);
 end;
 
+//-----------------------------------------------------------------------------
+// While there is a ClrScr method in the Crt package, this one doesn't
+// adds garbage to the terminal history, specially in programs that
+// are refreshing the screen constantly, like games
+//-----------------------------------------------------------------------------
 procedure ClearScreen;
 var
   Y: integer;
@@ -46,8 +57,11 @@ begin
   end;
 end;
 
+//-----------------------------------------------------------------------------
+// This procedure is based on GetConsoleBuf of the Crt Unit, it's being
+// used to handle the window resize
+//-----------------------------------------------------------------------------
 procedure RefreshWindowSize;
-{ This procedure is based on GetConsoleBuf of the Crt Unit }
 var
   WinInfo: TWinSize;
 begin
