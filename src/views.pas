@@ -32,21 +32,16 @@ end;
 //-----------------------------------------------------------------------------
 // This will convert the amount of seconds available into a 00:00 kind of
 // string
-//
-// TODO: Refactor this :)
 //-----------------------------------------------------------------------------
 function GetMessageFromAvailableSeconds(var AvailableSeconds: integer): string;
 var
-  Seconds: string;
-  Minutes: string;
+  Minutes, Seconds: integer;
+  MinutesString, SecondsString: string;
 begin
-  Minutes := ReplaceStr(IntToStr(Floor(AvailableSeconds / 60)), '-', '');
-  if AvailableSeconds < 0 then
-    Minutes := ReplaceStr(IntToStr(Ceil(AvailableSeconds / 60)), '-', '');
-  Seconds := ReplaceStr(IntToStr(AvailableSeconds mod 60), '-', '');
-  Minutes := AddChar('0', Minutes, 2);
-  Seconds := AddChar('0', Seconds, 2);
-  Result := Format('%s:%s', [Minutes, Seconds]);
+  DivMod(AvailableSeconds, 60, Minutes, Seconds);
+  MinutesString := AddChar('0', ReplaceStr(IntToStr(Minutes), '-', ''), 2);
+  SecondsString := AddChar('0', ReplaceStr(IntToStr(Seconds), '-', ''), 2);
+  Result := Format('%s:%s', [MinutesString, SecondsString]);
   if AvailableSeconds < 0 then
     Result := Concat('-', Result);
 end;
