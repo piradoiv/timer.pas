@@ -7,39 +7,12 @@ interface
 uses
   Classes, SysUtils, Crt, termio, baseunix, unix;
 
-procedure TextOut(X, Y: integer; Text: string);
-procedure TextOutCentered(Lines: array of const);
 procedure ClearScreen;
 procedure RefreshWindowSize;
+procedure TextOut(X, Y: integer; Text: string);
+procedure TextOutCentered(Lines: array of const);
 
 implementation
-
-//-----------------------------------------------------------------------------
-// Helper procedure to print a text directly in an specific position
-//-----------------------------------------------------------------------------
-procedure TextOut(X, Y: integer; Text: string);
-begin
-  GotoXY(X, Y);
-  Write(Text);
-end;
-
-//-----------------------------------------------------------------------------
-// Prints a multi-line message centered on screen
-//-----------------------------------------------------------------------------
-procedure TextOutCentered(Lines: array of const);
-var
-  I, X, Y: integer;
-  Line: string;
-begin
-  for I := Low(Lines) to High(Lines) do
-  begin
-    Line := string(Lines[I].VString);
-    X := Round((ScreenWidth / 2) - (Length(Line) / 2));
-    Y := Round(ScreenHeight / 2) + I - 1;
-    TextOut(X, Y, Line);
-  end;
-  GotoXY(ScreenWidth, ScreenHeight);
-end;
 
 //-----------------------------------------------------------------------------
 // While there is a ClrScr method in the Crt package, this one doesn't
@@ -75,6 +48,33 @@ begin
   GetMem(ConsoleBuf, ScreenHeight * ScreenWidth * 2);
   FillChar(ConsoleBuf^, ScreenHeight * ScreenWidth * 2, 0);
   Window(1, 1, ScreenWidth, ScreenHeight);
+end;
+
+//-----------------------------------------------------------------------------
+// Helper procedure to print a text directly in an specific position
+//-----------------------------------------------------------------------------
+procedure TextOut(X, Y: integer; Text: string);
+begin
+  GotoXY(X, Y);
+  Write(Text);
+end;
+
+//-----------------------------------------------------------------------------
+// Prints a multi-line message centered on screen
+//-----------------------------------------------------------------------------
+procedure TextOutCentered(Lines: array of const);
+var
+  I, X, Y: integer;
+  Line: string;
+begin
+  for I := Low(Lines) to High(Lines) do
+  begin
+    Line := string(Lines[I].VString);
+    X := Round((ScreenWidth / 2) - (Length(Line) / 2));
+    Y := Round(ScreenHeight / 2) + I - 1;
+    TextOut(X, Y, Line);
+  end;
+  GotoXY(ScreenWidth, ScreenHeight);
 end;
 
 end.
