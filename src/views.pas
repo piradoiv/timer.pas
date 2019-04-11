@@ -57,7 +57,7 @@ var
   X, Y, I, J: integer;
 begin
   OffsetX := Round((ScreenWidth / 2) - (Length(Message) * Font.GetWidth + 1) / 2);
-  OffsetY := Round((ScreenHeight / 2) - (Font.GetHeight / 2));
+  OffsetY := Round((ScreenHeight / 2) - (Font.GetHeight / 2)) + 1;
 
   for I := 1 to Length(Message) do
   begin
@@ -93,10 +93,8 @@ begin
     Font := TBigFont.Create
   else
     Font := TMediumFont.Create;
-
   WriteUsingFont(Message, Font);
-  if Assigned(Font) then
-    FreeAndNil(Font);
+  FreeAndNil(Font);
 
   GotoXY(1, ScreenHeight);
 end;
