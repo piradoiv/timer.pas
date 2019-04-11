@@ -47,55 +47,29 @@ begin
 end;
 
 //-----------------------------------------------------------------------------
-// This function maps a char to its equivalent fake font char
-//-----------------------------------------------------------------------------
-function MapCharacterToFontCharacter(const Character: char): string;
-begin
-  case Character of
-    ':': Result := COLON;
-    '-': Result := MINUS;
-    '0': Result := ZERO;
-    '1': Result := ONE;
-    '2': Result := TWO;
-    '3': Result := THREE;
-    '4': Result := FOUR;
-    '5': Result := FIVE;
-    '6': Result := SIX;
-    '7': Result := SEVEN;
-    '8': Result := EIGHT;
-    '9': Result := NINE;
-    else
-      Result := SPACE;
-  end;
-end;
-
-//-----------------------------------------------------------------------------
 // This is the procedure that actually draws each char to the screen, it
 // also does its best to center the message
-//
-// TODO: This must be refactored removing the magic numbers if
-//       we want to add more fonts
 //-----------------------------------------------------------------------------
-procedure WriteUsingFont(const Message: string);
+procedure WriteUsingFont(const Message: string; Font: TFont);
 var
-  FontChar: string;
+  FontCharString: string;
   OffsetX, OffsetY: integer;
   X, Y, I, J: integer;
 begin
-  OffsetX := Round((ScreenWidth / 2)) - Round((Length(Message) * 7) / 2) + 2;
-  OffsetY := Round((ScreenHeight / 2)) - 4;
+  OffsetX := Round((ScreenWidth / 2) - (Length(Message) * Font.GetWidth + 1) / 2);
+  OffsetY := Round((ScreenHeight / 2) - (Font.GetHeight / 2));
 
   for I := 1 to Length(Message) do
   begin
-    FontChar := MapCharacterToFontCharacter(Message[I]);
-    for J := 1 to 60 do
+    FontCharString := Font.GetForChar(Message[I]);
+    for J := 1 to Font.GetWidth * Font.GetHeight do
     begin
-      if FontChar[J] <> '1' then
+      if FontCharString[J] <> '1' then
         Continue;
 
-      X := ((I - 1) * 7) + ((J - 1) mod 6);
-      Y := Floor((J - 1) / 6);
-      TextOut(OffsetX + X, OffsetY + Y, ' ');
+      X := ((I - 1) * (Font.GetWidth + 1)) + ((J - 1) mod Font.GetWidth);
+      Y := Floor((J - 1) / Font.GetWidth);
+      TextOut(OffsetX + X, OffsetY + Y, Message[I]);
     end;
   end;
 end;
@@ -107,13 +81,16 @@ end;
 procedure DrawTimer(AvailableSeconds: integer);
 var
   Message: string;
+  Font: TFont;
 begin
   RefreshWindowSize;
   TextBackground(Black);
   ClearScreen;
   PrepareColor(AvailableSeconds);
-  Message := AddChar(' ', GetMessageFromAvailableSeconds(AvailableSeconds), 6);
-  WriteUsingFont(Message);
+  Message := AddChar(' ', GetMessageFromAvailableSeconds(AvailableSeconds), 6) + ' ';
+  Font := TBigFont.Create;
+  WriteUsingFont(Message, Font);
+  Font.Free;
   GotoXY(1, ScreenHeight);
 end;
 
