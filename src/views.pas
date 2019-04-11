@@ -39,8 +39,8 @@ var
   MinutesString, SecondsString: string;
 begin
   DivMod(AvailableSeconds, 60, Minutes, Seconds);
-  MinutesString := AddChar('0', ReplaceStr(IntToStr(Minutes), '-', ''), 2);
-  SecondsString := AddChar('0', ReplaceStr(IntToStr(Seconds), '-', ''), 2);
+  MinutesString := AddChar('0', IntToStr(Abs(Minutes)), 2);
+  SecondsString := AddChar('0', IntToStr(Abs(Seconds)), 2);
   Result := Format('%s:%s', [MinutesString, SecondsString]);
   if AvailableSeconds < 0 then
     Result := Concat('-', Result);
