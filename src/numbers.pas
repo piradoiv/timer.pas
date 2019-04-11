@@ -15,9 +15,13 @@ type
     function GetForChar(const Character: char): string; virtual; abstract;
   end;
 
-  { TBigFont }
-
   TBigFont = class(TFont)
+    function GetWidth: integer; override;
+    function GetHeight: integer; override;
+    function GetForChar(const Character: char): string; override;
+  end;
+
+  TMediumFont = class(TFont)
     function GetWidth: integer; override;
     function GetHeight: integer; override;
     function GetForChar(const Character: char): string; override;
@@ -25,7 +29,34 @@ type
 
 implementation
 
-{ TFont }
+function TMediumFont.GetWidth: integer;
+begin
+  Result := 3;
+end;
+
+function TMediumFont.GetHeight: integer;
+begin
+  Result := 5;
+end;
+
+function TMediumFont.GetForChar(const Character: char): string;
+begin
+  case Character of
+  ':': Result := '000010000010000';
+  '-': Result := '000000111000000';
+  '0': Result := '111101101101111';
+  '1': Result := '010010010010010';
+  '2': Result := '111001111100111';
+  '3': Result := '111001111001111';
+  '4': Result := '101101111001001';
+  '5': Result := '111100111001111';
+  '6': Result := '111100111101111';
+  '7': Result := '111001001001001';
+  '8': Result := '111101111101111';
+  '9': Result := '111101111001001';
+  else Result := '000000000000000';
+  end;
+end;
 
 function TBigFont.GetWidth: integer;
 begin

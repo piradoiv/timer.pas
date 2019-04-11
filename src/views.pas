@@ -88,9 +88,16 @@ begin
   ClearScreen;
   PrepareColor(AvailableSeconds);
   Message := AddChar(' ', GetMessageFromAvailableSeconds(AvailableSeconds), 6) + ' ';
-  Font := TBigFont.Create;
+
+  if (ScreenWidth > 6 * 8) and (ScreenHeight > 12) then
+    Font := TBigFont.Create
+  else
+    Font := TMediumFont.Create;
+
   WriteUsingFont(Message, Font);
-  Font.Free;
+  if Assigned(Font) then
+    FreeAndNil(Font);
+
   GotoXY(1, ScreenHeight);
 end;
 
