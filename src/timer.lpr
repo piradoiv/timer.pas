@@ -34,9 +34,11 @@ begin
   Previous := 0;
   PreviousPixels := 0;
 
-  TimerSeconds := DEFAULT_AMOUNT;
-  if ParamCount = 1 then
+  try
     TimerSeconds := Round(StrToFloat(ParamStr(1)) * 60);
+  except
+    TimerSeconds := DEFAULT_AMOUNT;
+  end;
 
   repeat
     repeat
