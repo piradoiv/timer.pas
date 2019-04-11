@@ -7,10 +7,17 @@ interface
 uses
   Classes, SysUtils, Crt, termio, baseunix, unix;
 
+type
+  TScreenSize = packed record
+    Width: integer;
+    Height: integer;
+  end;
+
 procedure ClearScreen;
-procedure RefreshWindowSize;
+procedure RefreshWindow;
 procedure TextOut(X, Y: integer; Text: string);
 procedure TextOutCentered(Lines: array of const);
+function GetScreenSize: TScreenSize;
 
 implementation
 
@@ -34,16 +41,15 @@ end;
 // This procedure is based on GetConsoleBuf of the Crt Unit, it's being
 // used to handle the window resize
 //-----------------------------------------------------------------------------
-procedure RefreshWindowSize;
+procedure RefreshWindow;
 var
-  WinInfo: TWinSize;
+  Size: TScreenSize;
 begin
-  fpIOCtl(TextRec(Output).Handle, TIOCGWINSZ, @Wininfo);
-  if (Wininfo.ws_col = ScreenWidth) and (Wininfo.ws_row = ScreenHeight) then
+  Size := GetScreenSize;
+  if (Size.Width = ScreenWidth) and (Size.Height = ScreenHeight) then
     Exit;
-
-  ScreenWidth := Wininfo.ws_col;
-  ScreenHeight := Wininfo.ws_row;
+  ScreenWidth := Size.Width;
+  ScreenHeight := Size.Height;
   FreeMem(ConsoleBuf);
   GetMem(ConsoleBuf, ScreenHeight * ScreenWidth * 2);
   FillChar(ConsoleBuf^, ScreenHeight * ScreenWidth * 2, 0);
@@ -75,6 +81,15 @@ begin
     TextOut(X, Y, Line);
   end;
   GotoXY(ScreenWidth, ScreenHeight);
+end;
+
+function GetScreenSize: TScreenSize;
+var
+  WinInfo: TWinSize;
+begin
+  fpIOCtl(TextRec(Output).Handle, TIOCGWINSZ, @Wininfo);
+  Result.Width := Wininfo.ws_col;
+  Result.Height := Wininfo.ws_row;
 end;
 
 end.

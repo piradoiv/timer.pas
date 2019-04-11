@@ -14,22 +14,25 @@ const
   VK_ESC = #27;
   VK_ENTER = #13;
 
-procedure Cleanup;
-begin
-  while KeyPressed do
-    ReadKey;
-  NormVideo;
-  ClearScreen;
-end;
+  procedure Cleanup;
+  begin
+    while KeyPressed do
+      ReadKey;
+    NormVideo;
+    ClearScreen;
+  end;
 
 var
   StartTime: TDateTime;
   Previous, TimerSeconds, AvailableSeconds, ElapsedSeconds: integer;
+  ScreenSize: TScreenSize;
+  PreviousPixels, CurrentPixels: integer;
   Finished: boolean;
 begin
   StartTime := Now;
   Finished := False;
   Previous := 0;
+  PreviousPixels := 0;
 
   TimerSeconds := DEFAULT_AMOUNT;
   if ParamCount = 1 then
@@ -39,10 +42,13 @@ begin
     repeat
       ElapsedSeconds := SecondsBetween(Now, StartTime);
       AvailableSeconds := TimerSeconds - ElapsedSeconds;
-      if Previous <> AvailableSeconds then
+      ScreenSize := GetScreenSize;
+      CurrentPixels := ScreenSize.Width * ScreenSize.Height;
+      if (Previous <> AvailableSeconds) or (PreviousPixels <> CurrentPixels) then
         DrawTimer(AvailableSeconds);
       Previous := AvailableSeconds;
-      Sleep(500);
+      PreviousPixels := ScreenWidth * ScreenHeight;
+      Sleep(40);
     until KeyPressed;
 
     while KeyPressed do
