@@ -76,7 +76,7 @@ end;
 // TODO: This must be refactored removing the magic numbers if
 //       we want to add more fonts
 //-----------------------------------------------------------------------------
-procedure DrawTimerUsingFont(const Message: string; const AvailableSeconds: integer);
+procedure WriteUsingFont(const Message: string);
 var
   FontChar: string;
   OffsetX, OffsetY: integer;
@@ -84,8 +84,6 @@ var
 begin
   OffsetX := Round((ScreenWidth / 2)) - Round((Length(Message) * 7) / 2) + 2;
   OffsetY := Round((ScreenHeight / 2)) - 4;
-  if AvailableSeconds < 0 then
-    Dec(OffsetX, 4);
 
   for I := 1 to Length(Message) do
   begin
@@ -114,8 +112,8 @@ begin
   TextBackground(Black);
   ClearScreen;
   PrepareColor(AvailableSeconds);
-  Message := GetMessageFromAvailableSeconds(AvailableSeconds);
-  DrawTimerUsingFont(Message, AvailableSeconds);
+  Message := AddChar(' ', GetMessageFromAvailableSeconds(AvailableSeconds), 6);
+  WriteUsingFont(Message);
   GotoXY(1, ScreenHeight);
 end;
 
