@@ -7,17 +7,23 @@ build:
 
 releases: linux-arm linux-x86_64 macos-x86_64
 
-linux-arm: prepare-folders
+linux-arm:
+	rm -rf src/lib/$@
+	mkdir -p src/lib/$@ dist
 	$(BUILD_COMMAND) -Tlinux -Parm src/timer.lpr
 	mv src/timer-$@ dist/timer-$@
 	cd dist && zip timer-$@.zip timer-$@
 
-linux-x86_64: prepare-folders
+linux-x86_64:
+	rm -rf src/lib/$@
+	mkdir -p src/lib/$@ dist
 	$(BUILD_COMMAND) -Tlinux -Px86_64 src/timer.lpr
 	mv src/timer-$@ dist/timer-$@
 	cd dist && zip timer-$@.zip timer-$@
 
-macos-x86_64: prepare-folders
+macos-x86_64:
+	rm -rf src/lib/$@
+	mkdir -p src/lib/$@ dist
 	$(BUILD_COMMAND) -Tdarwin -Px86_64 src/timer.lpr
 	mv src/timer-$@ dist/timer-$@
 	strip dist/timer-$@
@@ -29,9 +35,6 @@ clean:
 	rm -rf src/lib
 	rm -f timer
 	rm -rf dist
-
-prepare-folders:
-	mkdir -p src/lib/linux-arm src/lib/linux-x86_64 src/lib/macos-x86_64 dist
 
 all: build releases
 
