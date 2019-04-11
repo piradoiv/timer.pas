@@ -1,40 +1,25 @@
+PREPARE_BUILD = rm -rf src/lib/$@ && mkdir -p src/lib/$@ dist
 BUILD_COMMAND = fpc -O3 -Os -CX -XX -Xs -FUsrc/lib/$@ -otimer-$@
+POST_BUILD = mv src/timer-$@ dist/timer-$@ && cd dist && zip timer-$@.zip timer-$@
 
-build:
-	fpc -O3 -Os -CX -XX -Xs -otimer src/timer.lpr
-	mv src/timer timer
-	strip timer
-
-releases: linux-arm linux-x86_64 macos-x86_64
+all: linux-arm linux-x86_64 macos-x86_64
 
 linux-arm:
-	rm -rf src/lib/$@
-	mkdir -p src/lib/$@ dist
+	$(PREPARE_BUILD)
 	$(BUILD_COMMAND) -Tlinux -Parm src/timer.lpr
-	mv src/timer-$@ dist/timer-$@
-	cd dist && zip timer-$@.zip timer-$@
+	$(POST_BUILD)
 
 linux-x86_64:
-	rm -rf src/lib/$@
-	mkdir -p src/lib/$@ dist
+	$(PREPARE_BUILD)
 	$(BUILD_COMMAND) -Tlinux -Px86_64 src/timer.lpr
-	mv src/timer-$@ dist/timer-$@
-	cd dist && zip timer-$@.zip timer-$@
+	$(POST_BUILD)
 
 macos-x86_64:
-	rm -rf src/lib/$@
-	mkdir -p src/lib/$@ dist
+	$(PREPARE_BUILD)
 	$(BUILD_COMMAND) -Tdarwin -Px86_64 src/timer.lpr
-	mv src/timer-$@ dist/timer-$@
-	strip dist/timer-$@
-	cd dist && zip timer-$@.zip timer-$@
+	strip src/timer-$@
+	$(POST_BUILD)
 
 clean:
-	rm -f src/*.o
-	rm -f src/*.ppu
-	rm -rf src/lib
-	rm -f timer
-	rm -rf dist
-
-all: build releases
+	rm -rf dist src/lib
 
