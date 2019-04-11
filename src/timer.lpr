@@ -1,5 +1,7 @@
 program TimerProject;
 
+{$mode objfpc}{$H+}
+
 uses
   SysUtils,
   Classes,
